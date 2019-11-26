@@ -30,7 +30,7 @@ teams = {}
 currentYearOffsetOff = 1
 currentYearOffsetDef = 1
 currentYear = 2019
-numYears = 10
+numYears = 11
 
 for i in range(numYears):
     
@@ -486,54 +486,17 @@ for i in range(numYears):
             teams[currentTeam].GeneralDefense.penaltyFirstDowns = float(currText)
         count += 1
     
-    #games
-    page = r.get("https://www.pro-football-reference.com/years/" + year + "/games.htm")
-    soup = bs.BeautifulSoup(page.content, "html.parser")
-    temp = soup.findAll('td')
-    count = 0
-    team1 = ""
-    team2 = ""
-    team1_is_home = True
-    score1 = 0
-    score2 = 0
-    date = year
-    if yeari != currentYear:
-        for n in temp:
-            if (count > 12 or n.text == "Playoffs"):
-                count = 0
-                team1 = ""
-                team2 = ""
-                team1_is_home = True
-                score1 = 0
-                score2 = 0
-                date = year
-            if (count == 1):
-                dateArray = n.text.split(" ")
-                if(dateArray[0] == ""):
-                    break
-                date += months[dateArray[0]]
-                day = int(dateArray[1])
-                if(day < 10):
-                    date += "0"
-                date += dateArray[1] 
-            if (count == 3 and len(n.text) > 9):
-                team1 = n.text
-            if (count == 4):
-                team1_is_home = n.text != "@"
-            if (count == 5):
-                team2 = n.text
-            if (count == 7 and n.text != ""):
-                score1 = float(n.text)
-            if (count == 8 and n.text != ""):
-                score2 = float(n.text)
-                if team1_is_home:
-                    games[team1 + " " + team2] = game(team1, team2, score1, score2, yeari, date)
-                    games[team1 + " " + team2].getOdds()
-                else:
-                    games[team2 + " " + team1] = game(team2, team1, score2, score1, yeari, date)
-                    games[team2 + " " + team1].getOdds()
-            count += 1
-#tab above here
+#games    
+with open("games.csv") as gamesCsv:
+    line = gamesCsv.readline()
+    gameArray = line.split("\\n")[0].split(",")
+    while line:
+        tempGame = game(gameArray[1], gameArray[2], gameArray[0], gameArray[3], gameArray[4], "")
+        tempGame.spread = float(gameArray[5])
+        tempGame.overUnder = float(gameArray[6])
+        games[gameArray[1] + " " + gameArray[2] + " " + gameArray[0]] = tempGame
+        line = gamesCsv.readline()
+        gameArray = line.split("\\n")[0].split(",")
 
 #upcoming games
 #https://www.pro-football-reference.com/years/2019/games.htm

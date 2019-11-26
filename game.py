@@ -54,20 +54,21 @@ class game:
 		link = "https://www.pro-football-reference.com/boxscores/" + str(self.date)+ "0" + self.teamAbriviations[self.home] + ".htm"
 		page = r.get(link)
 		soup = bs.BeautifulSoup(page.content, "html.parser")
-		temp = soup.findAll('div', attrs={"class":"table_wrapper"})
-		table = str(list(temp)[1]).replace("<!--", "").replace("-->", "")
-		soup2 = bs.BeautifulSoup(table, "html.parser")
-		temp2 = soup2.find_all('td')
-		tempList = list(temp2) 
-		#line
-		lineInfo = tempList[len(tempList)-2].text.split("-") 
-		print(lineInfo)
-		favorite = lineInfo[0]
-		if len(lineInfo) >= 2:
-			if(self.home == favorite):
-				self.line -= float(lineInfo[1])
-			else:
-				self.line += float(lineInfo[1])
+		gamesTable = soup.findAll('div', attrs={"class":"table_wrapper"})
+		if len(list(gamesTable)) > 0:
+			gamesTable = str(list(gamesTable)[1]).replace("<!--", "").replace("-->", "")
+			soup2 = bs.BeautifulSoup(gamesTable, "html.parser")
+			games = soup2.find_all('td')
+			gamesList = list(games) 
+			#line
+			lineInfo = gamesList[len(gamesList)-2].text.split("-") 
+			#print(lineInfo)
+			favorite = lineInfo[0]
+			if len(lineInfo) >= 2:
+				if(self.home.strip() == favorite.strip()):
+					self.line -= float(lineInfo[1])
+				else:
+					self.line += float(lineInfo[1])
 
-		#total
-		self.overUnder = float(tempList[len(tempList)-1].text.split(" ")[0]) 
+			#total
+			self.overUnder = float(gamesList[len(gamesList)-1].text.split(" ")[0]) 
