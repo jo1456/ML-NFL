@@ -491,10 +491,10 @@ with open("games.csv") as gamesCsv:
     line = gamesCsv.readline()
     gameArray = line.split("\\n")[0].split(",")
     while line:
-        tempGame = game(gameArray[1], gameArray[2], gameArray[0], gameArray[3], gameArray[4], "")
+        tempGame = game(gameArray[1], gameArray[2], gameArray[3], gameArray[4], gameArray[0], "")
         tempGame.spread = float(gameArray[5])
         tempGame.overUnder = float(gameArray[6])
-        games[gameArray[1] + " " + gameArray[2] + " " + gameArray[0]] = tempGame
+        games[gameArray[1] + " " + gameArray[0] + " " + gameArray[2] + " " + gameArray[0]] = tempGame
         line = gamesCsv.readline()
         gameArray = line.split("\\n")[0].split(",")
 
@@ -555,6 +555,7 @@ with open('train'+'.csv', 'w', newline='') as csvfile:
     for gameKey in games:
         game = games[gameKey]
         team = game.home+" "+str(game.year)
+        print(team)
         if team in teams and int(game.year) != yeari:
             
             home = teams[game.home+ " " +str(game.year)]
@@ -570,7 +571,7 @@ with open('train'+'.csv', 'w', newline='') as csvfile:
             pointsPerDrive = (home.DriveAvgs.ptsPerDrive + away.DriveAvgsAgainst.ptsPerDrive)/2
             thirdPct = (home.Conversions.thirdPct + away.ConversionsAgainst.thirdPct)/2
             completionPct = (home.PassingOff.compPct + away.PassingDefense.compPct)/2
-            row = [passYardsAndRedZone, rushYardsAndRedZone, turnovers, penalties, sacks, startingPosition, pointsPerDrive, thirdPct, completionPct, 1, game.homeScore, game.line, game.overUnder]
+            row = [passYardsAndRedZone, rushYardsAndRedZone, turnovers, penalties, sacks, startingPosition, pointsPerDrive, thirdPct, completionPct, 1, game.homeScore]
             output_writer.writerow(row)
 
             #away
@@ -583,7 +584,7 @@ with open('train'+'.csv', 'w', newline='') as csvfile:
             pointsPerDrive = (away.DriveAvgs.ptsPerDrive + home.DriveAvgsAgainst.ptsPerDrive)/2
             thirdPct = (away.Conversions.thirdPct + home.ConversionsAgainst.thirdPct)/2
             completionPct = (away.PassingOff.compPct + home.PassingDefense.compPct)/2
-            row = [passYardsAndRedZone, rushYardsAndRedZone, turnovers, penalties, sacks, startingPosition, pointsPerDrive, thirdPct, completionPct, 0, game.awayScore,  game.line, game.overUnder]
+            row = [passYardsAndRedZone, rushYardsAndRedZone, turnovers, penalties, sacks, startingPosition, pointsPerDrive, thirdPct, completionPct, 0, game.awayScore]
             output_writer.writerow(row)
 
 with open('test.csv', 'w', newline='') as csvfile:
