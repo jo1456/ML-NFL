@@ -571,7 +571,7 @@ with open('train'+'.csv', 'w', newline='') as csvfile:
             pointsPerDrive = (home.DriveAvgs.ptsPerDrive + away.DriveAvgsAgainst.ptsPerDrive)/2
             thirdPct = (home.Conversions.thirdPct + away.ConversionsAgainst.thirdPct)/2
             completionPct = (home.PassingOff.compPct + away.PassingDefense.compPct)/2
-            row = [passYardsAndRedZone, rushYardsAndRedZone, turnovers, penalties, sacks, startingPosition, pointsPerDrive, thirdPct, completionPct, 1, game.homeScore]
+            row = [game.year, game.home, passYardsAndRedZone, rushYardsAndRedZone, turnovers, penalties, sacks, startingPosition, pointsPerDrive, thirdPct, completionPct, 1, game.homeScore]
             output_writer.writerow(row)
 
             #away
@@ -584,7 +584,7 @@ with open('train'+'.csv', 'w', newline='') as csvfile:
             pointsPerDrive = (away.DriveAvgs.ptsPerDrive + home.DriveAvgsAgainst.ptsPerDrive)/2
             thirdPct = (away.Conversions.thirdPct + home.ConversionsAgainst.thirdPct)/2
             completionPct = (away.PassingOff.compPct + home.PassingDefense.compPct)/2
-            row = [passYardsAndRedZone, rushYardsAndRedZone, turnovers, penalties, sacks, startingPosition, pointsPerDrive, thirdPct, completionPct, 0, game.awayScore]
+            row = [game.year, game.away, passYardsAndRedZone, rushYardsAndRedZone, turnovers, penalties, sacks, startingPosition, pointsPerDrive, thirdPct, completionPct, 0, game.awayScore]
             output_writer.writerow(row)
 
 with open('test.csv', 'w', newline='') as csvfile:
